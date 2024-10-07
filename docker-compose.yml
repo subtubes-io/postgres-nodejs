@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:16-alpine # Use the lightweight Alpine image with PostgreSQL 15
+    container_name: postgres-db # Give the container a custom name
+    environment:
+      POSTGRES_USER: postgres # Set the PostgreSQL username
+      POSTGRES_PASSWORD: postgres # Set the PostgreSQL password
+      POSTGRES_DB: mydatabase # Set the name of the default database
+    ports:
+      - "5432:5432" # Map PostgreSQL port to localhost
+    volumes:
+      - ~/docker/postgres/example:/var/lib/postgresql/data # Mount a persistent volume for data
+
