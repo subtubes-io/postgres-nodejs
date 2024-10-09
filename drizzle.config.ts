@@ -4,6 +4,6 @@ export default defineConfig({
   schema: "./src/schema.ts",
   out: "./drizzle",
   dbCredentials: {
-    url: "postgres://postgres:postgres@localhost:5432/mydatabase",
+    url: "postgres://postgres:postgres@localhost:5432/subtubes",
   },
 });

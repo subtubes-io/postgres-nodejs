@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_USER: postgres # Set the PostgreSQL username
       POSTGRES_PASSWORD: postgres # Set the PostgreSQL password
-      POSTGRES_DB: mydatabase # Set the name of the default database
+      POSTGRES_DB: subtubes # Set the name of the default database
     ports:
       - "5432:5432" # Map PostgreSQL port to localhost
     volumes:
