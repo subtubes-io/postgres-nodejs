@@ -26,7 +26,7 @@ if (isNaN(NUM_RECORDS)) {
 // PostgreSQL connection setup
 const pool = new Pool({
   user: "postgres",
-  host: "localhost",
+  host: "subtubes-postgres",
   database: "subtubes",
   password: "postgres",
   port: 5432,

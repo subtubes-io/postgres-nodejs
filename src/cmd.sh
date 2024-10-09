@@ -4,6 +4,11 @@ function main {
 
     case $1 in
 
+    "test")
+        docker compose build
+        docker compose up
+        ;;
+
     "init")
         npm ci
         npm run generate
@@ -18,15 +23,15 @@ function main {
             echo "Deleting old file ..."
             rm ./tmp/events.binary
         fi
-
-        psql -U postgres -d subtubes -p 5432 -h subtubes-postgres -c "\COPY (SELECT * FROM events) TO './tmp/events.binary' WITH (FORMAT binary)"
+        echo "copying database to binary file"
+        psql -U postgres -d subtubes -p 5432 -h postgres -c "\COPY (SELECT * FROM events) TO './tmp/events.binary' WITH (FORMAT binary)"
         ;;
 
     "restore")
         export PGPASSWORD=postgres
         export PGOPTiONS='--statement-timeout=0'
         echo "Restoring from file ..."
-        psql -U postgres -d subtubes -p 5432 -h subtubes-postgres -c "\COPY events_partition FROM './tmp/events.binary' WITH (FORMAT binary)"
+        psql -U postgres -d subtubes -p 5432 -h postgres -c "\COPY events_partition FROM './tmp/events.binary' WITH (FORMAT binary)"
         ;;
     "destroy")
         rm -r node_modules

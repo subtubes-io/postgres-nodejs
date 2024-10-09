@@ -1,0 +1,24 @@
+FROM ubuntu:20.04
+# Set environment variables to avoid prompts during installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update the package list and install curl, gnupg (required for Node.js setup)
+RUN apt-get update && apt-get install -y curl gnupg2 ca-certificates lsb-release software-properties-common
+
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs
+
+# Install Screen
+RUN apt-get install -y screen
+
+# Install PostgreSQL
+RUN apt-get update && apt-get install -y postgresql postgresql-contrib
+
+# Clean up the apt cache to reduce the image size
+RUN rm -rf /var/lib/apt/lists/*
+
+# Set the working directory inside the container
+WORKDIR /subtubes
+
+# Start the container with a bash prompt (optional)
+CMD ["bash"]
