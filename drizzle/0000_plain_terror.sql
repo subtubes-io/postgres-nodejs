@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "events" (
 	);
 
 -- partition table
-CREATE TABLE IF NOT EXISTS "events_partition" (LIKE events ) PARTITION BY RANGE ( "created_at" );
+CREATE TABLE IF NOT EXISTS "events_partition" (LIKE events INCLUDING DEFAULTS ) PARTITION BY RANGE ( "created_at" );
 
 -- partitions
 CREATE TABLE "events"."events_partition_2024_07" PARTITION OF "public"."events_partition" 

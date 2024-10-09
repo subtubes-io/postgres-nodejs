@@ -22,6 +22,11 @@ function main {
         npm run data:1
         ;;
 
+    "copy")
+
+        psql -U postgres -d subtubes -p 5432 -h localhost -c "COPY "
+
+        ;;
     "destroy")
         rm -r node_modules
         docker compose stop
