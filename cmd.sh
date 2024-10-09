@@ -4,35 +4,21 @@ function main {
 
     case $1 in
 
-    "init")
-        npm ci
-        npm run generate
-        npm run migrate
-        npm run data:1
-        ;;
-
-    "copy")
-        export PGPASSWORD=postgres
-        export PGOPTiONS='--statement-timeout=0'
-        if [ -f ./tmp/events.binary ]; then
-            echo "Deleting old file ..."
-            rm ./tmp/events.binary
-        fi
-
-        psql -U postgres -d subtubes -p 5432 -h subtubes-postgres -c "\COPY (SELECT * FROM events) TO './tmp/events.binary' WITH (FORMAT binary)"
-        ;;
-
-    "restore")
-        export PGPASSWORD=postgres
-        export PGOPTiONS='--statement-timeout=0'
-        echo "Restoring from file ..."
-        psql -U postgres -d subtubes -p 5432 -h subtubes-postgres -c "\COPY events_partition FROM './tmp/events.binary' WITH (FORMAT binary)"
+    "setup")
+        docker compose build
+        docker compose up -d
+        docker exec -it jumpbox bash
         ;;
     "destroy")
-        rm -r node_modules
-        docker compose stop
-        docker rm subtubes-postgres
-        rm -r ~/docker/postgres/subtubes-postgres
+        docker compose down
+        if [ -d src/node_modules ]; then
+            echo "Removing node_modules"
+            rm -r src/node_modules
+        fi
+        if [ -d ~/docker/postgres/subtubes-postgres ]; then
+            echo "Removing docker container data..."
+            rm -r ~/docker/postgres/subtubes-postgres
+        fi
         ;;
     *)
         echo "Unrecognized command $1"
