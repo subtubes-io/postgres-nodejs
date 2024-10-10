@@ -3,17 +3,11 @@
 function main {
 
     case $1 in
-
-    "test")
-        docker compose build
-        docker compose up
-        ;;
-
     "init")
         npm ci
         npm run generate
         npm run migrate
-        npm run data:1
+        npm run data:1m
         ;;
 
     "copy")
@@ -32,12 +26,6 @@ function main {
         export PGOPTiONS='--statement-timeout=0'
         echo "Restoring from file ..."
         psql -U postgres -d subtubes -p 5432 -h postgres -c "\COPY events_partition FROM './tmp/events.binary' WITH (FORMAT binary)"
-        ;;
-    "destroy")
-        rm -r node_modules
-        docker compose stop
-        docker rm subtubes-postgres
-        rm -r ~/docker/postgres/subtubes-postgres
         ;;
     *)
         echo "Unrecognized command $1"

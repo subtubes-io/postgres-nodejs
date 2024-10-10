@@ -19,6 +19,7 @@ RUN rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
 WORKDIR /subtubes
+SHELL ["/bin/bash", "-c"]
 
 # Start the container with a bash prompt (optional)
 CMD ["bash"]

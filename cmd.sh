@@ -4,7 +4,7 @@ function main {
 
     case $1 in
 
-    "setup")
+    "init")
         docker compose build
         docker compose up -d
         docker exec -it jumpbox bash

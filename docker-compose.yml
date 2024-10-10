@@ -17,7 +17,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile.jumpbox
     volumes:
-      - ./src:/subtubes/src
+      - ./src:/subtubes
     working_dir: /subtubes
     stdin_open: true
     tty: true
