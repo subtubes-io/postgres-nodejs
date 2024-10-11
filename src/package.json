@@ -6,8 +6,9 @@
   "scripts": {
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
-    "data:1m": "node scripts/faker/events.js",
-    "data:5m": "node scripts/faker/events.js --numRecords=5000000"
+    "data:users": "node scripts/faker/users.js",
+    "data:events:1m": "node scripts/faker/events.js",
+    "data:events:5m": "node scripts/faker/events.js --numRecords=5000000"
   },
   "author": "",
   "license": "ISC",

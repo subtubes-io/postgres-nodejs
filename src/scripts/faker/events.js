@@ -23,7 +23,6 @@ if (isNaN(NUM_RECORDS)) {
   process.exit(1);
 }
 
-// PostgreSQL connection setup
 const pool = new Pool({
   user: "postgres",
   host: "subtubes-postgres",
@@ -32,8 +31,18 @@ const pool = new Pool({
   port: 5432,
 });
 
+async function fetchUserIds() {
+  try {
+    const res = await pool.query("SELECT id FROM users");
+    return res.rows.map((row) => row.id);
+  } catch (err) {
+    console.error("Error fetching user IDs:", err);
+    process.exit(1);
+  }
+}
+
 // Function to generate a random event
-function generateRandomEvent() {
+function generateRandomEvent(userIds) {
   const createdAt = faker.date.between("2024-07-01", "2024-11-01");
   return {
     event_type: faker.random.arrayElement([
@@ -43,7 +52,7 @@ function generateRandomEvent() {
       "login",
       "logout",
     ]),
-    user_id: faker.datatype.number({ min: 1, max: 10000000 }),
+    user_id: faker.random.arrayElement(userIds), // Use random user_id from the fetched list
     system_id: faker.datatype.number({ min: 1, max: 100 }),
     event_data: JSON.stringify({
       description: faker.lorem.sentence(),
@@ -54,7 +63,7 @@ function generateRandomEvent() {
   };
 }
 
-async function insertEventsInBatches(batchSize) {
+async function insertEventsInBatches(batchSize, userIds) {
   for (let i = 0; i < NUM_RECORDS; i += batchSize) {
     const values = [];
     const placeholders = [];
@@ -63,7 +72,7 @@ async function insertEventsInBatches(batchSize) {
     const currentBatchSize = Math.min(batchSize, NUM_RECORDS - i);
 
     for (let j = 0; j < currentBatchSize; j++) {
-      const event = generateRandomEvent();
+      const event = generateRandomEvent(userIds);
 
       values.push(
         event.event_type,
@@ -101,4 +110,8 @@ async function insertEventsInBatches(batchSize) {
 
 const BATCH_SIZE = 10000;
 
-insertEventsInBatches(BATCH_SIZE).then(() => pool.end());
+(async () => {
+  const userIds = await fetchUserIds(); // Fetch user IDs from the users table
+  await insertEventsInBatches(BATCH_SIZE, userIds);
+  pool.end();
+})();

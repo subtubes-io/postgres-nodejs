@@ -7,7 +7,8 @@ function main {
         npm ci
         npm run generate
         npm run migrate
-        npm run data:1m
+        npm run data:users
+        npm run data:events:1m
         ;;
 
     "copy")
