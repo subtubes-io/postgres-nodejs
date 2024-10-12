@@ -6,6 +6,7 @@ import { ComponentModule } from "@/components/ComponentModule";
 import ForeignKeyTable from "@/components/tables/ForeignKeys";
 import IndexesTable from "@/components/tables/IndexesTable";
 import TriggersTable from "@/components/tables/TriggerTable";
+import SidePanel from "@/components/SidePanel";
 // import { ScheduleForm } from "@/components/custom/ScheduleForm";
 // import { SeedForm } from "@/components/custom/SeedForm";
 
@@ -114,6 +115,7 @@ const triggerData = [
 const Home: NextPage = async () => {
   return (
     <>
+      <SidePanel />
       <ComponentModule title={"Event Table Partition"}>
         <D3BarChart data={d} />
       </ComponentModule>
