@@ -1,21 +1,39 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import * as d3 from "d3";
 
-interface DataPoint {
-  name: string;
-  parentName: string;
-  size: string;
-  rows: number;
-}
+import { PartitionRepository } from "@/repositories/PartitionRepository";
+
+import type { Partition } from "@/repositories/PartitionRepository";
 
 interface D3BarChartProps {
-  data: DataPoint[];
+  // data: Partition[];
 }
 
-export const D3BarChart: React.FC<D3BarChartProps> = ({ data }) => {
+export const D3BarChart: React.FC<D3BarChartProps> = () => {
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const [partitions, setPartitions] = useState<Partition[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const partitionRepo = new PartitionRepository();
+
+  useEffect(() => {
+    const fetchPartitions = async () => {
+      try {
+        const data = await partitionRepo.getPartitions();
+        setPartitions(data);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch partitions.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPartitions();
+  }, []);
 
   useEffect(() => {
     const width = 1000;
@@ -40,13 +58,13 @@ export const D3BarChart: React.FC<D3BarChartProps> = ({ data }) => {
     // Create scales
     const xScale = d3
       .scaleBand()
-      .domain(data.map((d) => d.name))
+      .domain(partitions.map((d) => d.tablename))
       .range([margin.left, width - margin.right])
       .padding(0.1);
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.rows) ?? 0])
+      .domain([0, d3.max(partitions, (d) => d.rowcount) ?? 0])
       .nice()
       .range([height - margin.bottom, margin.top]);
 
@@ -68,23 +86,23 @@ export const D3BarChart: React.FC<D3BarChartProps> = ({ data }) => {
     // Create bars with tooltip functionality
     svg
       .selectAll(".bar")
-      .data(data)
+      .data(partitions)
       .join("rect")
       .attr("class", "bar")
-      .attr("x", (d) => xScale(d.name)!)
-      .attr("y", (d) => yScale(d.rows))
+      .attr("x", (d) => xScale(d.tablename)!)
+      .attr("y", (d) => yScale(d.rowcount))
       .attr("width", xScale.bandwidth())
-      .attr("height", (d) => height - margin.bottom - yScale(d.rows))
+      .attr("height", (d) => height - margin.bottom - yScale(d.rowcount))
       .attr("fill", "rgba(128 232 255)")
       .on("mouseover", (event, d) => {
         console.log(d);
         tooltip
           .style("display", "block")
           .html(
-            `<strong>Partition:</strong> ${d.name}<br/>
-             <strong>Parent Table:</strong> ${d.parentName}<br/>
-             <strong>Size:</strong> ${d.size}<br/>
-             <strong>Rows:</strong> ${d.rows}`
+            `<strong>Partition:</strong> ${d.tablename}<br/>
+             <strong>Parent Table:</strong> ${d.parenttable}<br/>
+             <strong>Size:</strong> ${d.tablesize}<br/>
+             <strong>Rows:</strong> ${d.rowcount}`
           )
           .style("left", `${event.pageX + 10}px`)
           .style("top", `${event.pageY - 28}px`);
@@ -102,7 +120,7 @@ export const D3BarChart: React.FC<D3BarChartProps> = ({ data }) => {
     return () => {
       tooltip.remove();
     };
-  }, [data]);
+  }, [partitions]);
 
   return (
     <svg

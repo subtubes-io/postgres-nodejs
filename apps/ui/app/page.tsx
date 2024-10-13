@@ -7,43 +7,6 @@ import ForeignKeyTable from "@/components/tables/ForeignKeys";
 import IndexesTable from "@/components/tables/IndexesTable";
 import TriggersTable from "@/components/tables/TriggerTable";
 import SidePanel from "@/components/SidePanel";
-// import { ScheduleForm } from "@/components/custom/ScheduleForm";
-// import { SeedForm } from "@/components/custom/SeedForm";
-
-// import { StatsBar } from "@/components/custom/StatsBar";
-
-const d = [
-  {
-    name: "events_partition_2024_07",
-    parentName: "events",
-    size: "94 MB",
-    rows: 465998,
-  },
-  {
-    name: "events_partition_2024_08",
-    parentName: "events",
-    size: "94 MB",
-    rows: 466821,
-  },
-  {
-    name: "events_partition_2024_09",
-    parentName: "events",
-    size: "91 MB",
-    rows: 450796,
-  },
-  {
-    name: "events_partition_2024_10",
-    parentName: "events",
-    size: "94 MB",
-    rows: 466385,
-  },
-  {
-    name: "events_partition_2024_11",
-    parentName: "events",
-    size: "2 MB",
-    rows: 0,
-  },
-];
 
 const foreignKeyData = [
   {
@@ -55,10 +18,9 @@ const foreignKeyData = [
   {
     referenceTable: "users",
     constraintName: "fk_user_id",
-    referencingTable: "other_table_example", // Replace with actual data if available
+    referencingTable: "other_table_example",
     referencingColumn: "user_id",
   },
-  // Add more rows if needed
 ];
 
 const indexesTableData = [
@@ -117,7 +79,7 @@ const Home: NextPage = async () => {
     <>
       <SidePanel />
       <ComponentModule title={"Event Table Partition"}>
-        <D3BarChart data={d} />
+        <D3BarChart />
       </ComponentModule>
       <Divider />
       <ComponentModule title={"Event Table Foreign Key Constraints"}>
