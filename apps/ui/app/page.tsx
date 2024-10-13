@@ -23,27 +23,6 @@ const foreignKeyData = [
   },
 ];
 
-const indexesTableData = [
-  {
-    referenceTable: "events_pkey",
-    constraintName: "id",
-    referencingTable: "t",
-    referencingColumn: "t",
-  },
-  {
-    referenceTable: "idx_event_created_at",
-    constraintName: "created_at",
-    referencingTable: "f",
-    referencingColumn: "f",
-  },
-  {
-    referenceTable: "idx_id_event",
-    constraintName: "id",
-    referencingTable: "f",
-    referencingColumn: "f",
-  },
-];
-
 const triggerData = [
   {
     triggerName: "sync_events_trigger",
@@ -87,7 +66,7 @@ const Home: NextPage = async () => {
       </ComponentModule>
 
       <ComponentModule title={"Event Table Indexes"}>
-        <IndexesTable data={indexesTableData} />
+        <IndexesTable />
       </ComponentModule>
 
       <ComponentModule title={"Event Table Associated Triggers"}>

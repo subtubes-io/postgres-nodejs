@@ -10,7 +10,18 @@ export class PartitionsController {
   async getPartitionData() {
     try {
       // Call the service to run the raw SQL query
-      const data = await this.partitionsService.runRawQuery();
+      const data = await this.partitionsService.getPartitions();
+      return data; // Return the result as the response
+    } catch (error) {
+      throw new Error(`Error fetching partition data: ${error.message}`);
+    }
+  }
+
+  @Get('/indexes')
+  async getIndexesData() {
+    try {
+      // Call the service to run the raw SQL query
+      const data = await this.partitionsService.getIndexes();
       return data; // Return the result as the response
     } catch (error) {
       throw new Error(`Error fetching partition data: ${error.message}`);

@@ -33,6 +33,7 @@ export const D3BarChart: React.FC<D3BarChartProps> = () => {
     };
 
     fetchPartitions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

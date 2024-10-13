@@ -7,7 +7,7 @@ export class PartitionsService {
     @Inject('DRIZZLE_CONNECTION') private readonly db: PostgresJsDatabase,
   ) {}
 
-  async runRawQuery() {
+  async getPartitions() {
     const sqlQuery = `
         SELECT
             child.relname AS tableName,
@@ -31,6 +31,37 @@ export class PartitionsService {
             AND child.relkind IN ( 'r', 'p' ) 
         ORDER BY
             tableName;
+    `;
+
+    try {
+      const result = await this.db.execute(sqlQuery);
+      return result; // Handle result accordingly
+    } catch (error) {
+      throw new Error(`Error executing raw SQL: ${error.message}`);
+    }
+  }
+
+  async getIndexes() {
+    const sqlQuery = `
+        SELECT T
+            .relname AS tableName,-- Adding the table name
+            i.relname AS indexName,
+            A.attname AS columnName,
+            ix.indisunique AS isUnique,
+            ix.indisprimary AS isPrimary 
+        FROM
+            pg_class
+            T JOIN pg_index ix ON T.OID = ix.indrelid
+            JOIN pg_class i ON i.OID = ix.indexrelid
+            JOIN pg_attribute A ON A.attnum = ANY ( ix.indkey ) 
+            AND A.attrelid = T.OID 
+        WHERE
+            T.relname LIKE'events%' -- Filter to include only event-related tables
+            
+        ORDER BY
+            tableName,-- Order by table name to make results more readable
+            indexName,
+            A.attnum;
     `;
 
     try {
