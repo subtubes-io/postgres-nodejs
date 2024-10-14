@@ -71,7 +71,10 @@ export default function SidePanel() {
                                 id="project-name"
                                 name="project-name"
                                 type="text"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-inset focus:ring-gray-600 dark:focus:ring-gray-400 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-zinc-900 
+                                dark:text-white shadow-sm ring-1 ring-inset 
+                                ring-zinc-300 dark:ring-zinc-700 dark:bg-zinc-800  placeholder:text-zinc-400 dark:placeholder-zinc-500 focus:ring-2 focus:ring-inset 
+                                focus:ring-zinc-600 dark:focus:ring-zinc-400 sm:text-sm sm:leading-6"
                                 placeholder="Enter project name"
                               />
                             </div>
@@ -88,7 +91,9 @@ export default function SidePanel() {
                                 id="description"
                                 name="description"
                                 rows={4}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-inset focus:ring-gray-600 dark:focus:ring-gray-400 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-zinc-900 dark:text-white shadow-sm ring-1 ring-inset 
+                                ring-zinc-300 dark:ring-zinc-700 dark:bg-zinc-800 placeholder:text-zinc-400 dark:placeholder-zinc-500 
+                                focus:ring-2 focus:ring-inset focus:ring-zinc-600 dark:focus:ring-zinc-400 sm:text-sm sm:leading-6"
                                 placeholder="Enter description"
                               />
                             </div>

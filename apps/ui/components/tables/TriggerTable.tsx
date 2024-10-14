@@ -3,31 +3,80 @@ import React, { useEffect, useState } from "react";
 import { TriggerRepository } from "@/repositories/TriggerRepository";
 import type { Trigger } from "@/repositories/TriggerRepository";
 import { SettingsPanel } from "./SettingsPanel";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from "react";
 
 interface TriggersTableProps {}
 
 const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
-  const [isTruncated, setIsTruncated] = useState(true);
+  const [isOpen, setIsOpen] = useState(false); // State to control modal open/close
 
-  // Length of characters to show before truncating
-  const characterLimit = 100;
-
-  const toggleTruncate = () => {
-    setIsTruncated(!isTruncated);
-  };
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
   return (
-    <div>
+    <>
       <pre className="whitespace-pre-wrap break-words text-sm/5">
-        {isTruncated ? `${text.slice(0, characterLimit)}...` : text}
+        {text.slice(0, 100)}...
       </pre>
-      <button
-        onClick={toggleTruncate}
-        className="text-blue-600 hover:underline"
-      >
-        {isTruncated ? "Show more" : "Show less"}
+      <button onClick={openModal} className="text-blue-600 hover:underline">
+        Show more
       </button>
-    </div>
+
+      {/* Modal Dialog */}
+      <Transition show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-50" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-lg bg-zinc-900 p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-white"
+                  >
+                    Function Definition
+                  </Dialog.Title>
+                  <div className="mt-4">
+                    <pre className="whitespace-pre-wrap break-words text-sm text-white">
+                      {text}
+                    </pre>
+                  </div>
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                      onClick={closeModal}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
   );
 };
 
@@ -103,11 +152,6 @@ export const TriggersTable: React.FC<TriggersTableProps> = () => {
               <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
                 {row.level}
               </td>
-              {/* <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-              <pre className="whitespace-pre-wrap break-words overflow-hidden text-sm/5">
-                {row.functionDefinition}
-              </pre>
-            </td> */}
               <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
                 <TruncatedText text={row.functiondefinition} />
               </td>
