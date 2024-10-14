@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { ProjectsRepository } from "@/repositories/ProjectsRepository";
 import type { Project } from "@/repositories/ProjectsRepository";
+import Link from "next/link";
 
 export const ProjectsTable: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -53,7 +54,7 @@ export const ProjectsTable: React.FC = () => {
         {projects.map((project) => (
           <tr key={project.id} className="dark:hover:bg-gray-700">
             <td className="relative px-4 border-b border-zinc-950/5 dark:border-white/5 py-4">
-              {project.id}
+              <Link href={`/projects/${project.id}`}> {project.id}</Link>
             </td>
             <td className="relative px-4 border-b border-zinc-950/5 dark:border-white/5 py-4">
               {project.name}
