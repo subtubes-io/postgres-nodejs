@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import { Divider } from "@/components/catalyst/divider";
 import { D3BarChart } from "@/components/charts";
 import { ComponentModule } from "@/components/ComponentModule";
-import ForeignKeyTable from "@/components/tables/ForeignKeys";
+import ForeignKeyTable from "@/components/tables/ForeignKeysTable";
 import IndexesTable from "@/components/tables/IndexesTable";
 import TriggersTable from "@/components/tables/TriggerTable";
 import SidePanel from "@/components/SidePanel";

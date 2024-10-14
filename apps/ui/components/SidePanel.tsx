@@ -9,23 +9,6 @@ import {
   QuestionMarkCircleIcon,
 } from "@heroicons/react/20/solid";
 
-interface TeamMember {
-  name: string;
-  email: string;
-  href: string;
-  imageUrl: string;
-}
-
-const team: TeamMember[] = [
-  {
-    name: "Tom Cook",
-    email: "tom.cook@example.com",
-    href: "#",
-    imageUrl:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-];
-
 export default function SidePanel() {
   const [open, setOpen] = useState<boolean>(false);
 
@@ -53,7 +36,7 @@ export default function SidePanel() {
                     <div className="bg-zinc-900 px-4 py-6 sm:px-6">
                       <div className="flex items-center justify-between">
                         <DialogTitle className="text-base font-semibold leading-6 text-white">
-                          New Project
+                          Global Settings
                         </DialogTitle>
                         <div className="ml-3 flex h-7 items-center">
                           <button
@@ -69,8 +52,7 @@ export default function SidePanel() {
                       </div>
                       <div className="mt-1">
                         <p className="text-sm text-gray-300">
-                          Get started by filling in the information below to
-                          create your new project.
+                          All global settings
                         </p>
                       </div>
                     </div>
@@ -80,7 +62,7 @@ export default function SidePanel() {
                           <div>
                             <label
                               htmlFor="project-name"
-                              className="block text-sm font-medium leading-6 text-white"
+                              className="block text-sm font-medium leading-6 text-gray-700 dark:text-gray-300"
                             >
                               Project name
                             </label>
@@ -89,14 +71,15 @@ export default function SidePanel() {
                                 id="project-name"
                                 name="project-name"
                                 type="text"
-                                className="block w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-inset focus:ring-gray-600 dark:focus:ring-gray-400 sm:text-sm sm:leading-6"
+                                placeholder="Enter project name"
                               />
                             </div>
                           </div>
                           <div>
                             <label
                               htmlFor="description"
-                              className="block text-sm font-medium leading-6 text-white"
+                              className="block text-sm font-medium leading-6 text-gray-700 dark:text-gray-300"
                             >
                               Description
                             </label>
@@ -105,14 +88,14 @@ export default function SidePanel() {
                                 id="description"
                                 name="description"
                                 rows={4}
-                                className="block w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
-                                defaultValue={""}
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 dark:bg-gray-800 placeholder:text-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-inset focus:ring-gray-600 dark:focus:ring-gray-400 sm:text-sm sm:leading-6"
+                                placeholder="Enter description"
                               />
                             </div>
                           </div>
-                          <div>
+                          {/* <div>
                             <h3 className="text-sm font-medium leading-6 text-white">
-                              Team Members
+                              Permission
                             </h3>
                             <div className="mt-2">
                               <div className="flex space-x-2">
@@ -144,10 +127,10 @@ export default function SidePanel() {
                                 </button>
                               </div>
                             </div>
-                          </div>
+                          </div> */}
                           <fieldset>
                             <legend className="text-sm font-medium leading-6 text-white">
-                              Privacy
+                              Permission
                             </legend>
                             <div className="mt-2 space-y-4">
                               <div className="relative flex items-start">
@@ -271,13 +254,13 @@ export default function SidePanel() {
                     <button
                       type="button"
                       onClick={() => setOpen(false)}
-                      className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                      className="ml-4 inline-flex justify-center rounded-md bg-red-300 px-3 py-2 text-sm text-black shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="ml-4 inline-flex justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                      className="ml-4 inline-flex justify-center rounded-md bg-cyan-600 px-3 py-2 text-sm text-black shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
                     >
                       Save
                     </button>
