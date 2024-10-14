@@ -4,7 +4,7 @@ import { PostgresJsDatabase } from 'drizzle-orm/postgres-js'; // Import your dat
 @Injectable()
 export class PartitionsService {
   constructor(
-    @Inject('DRIZZLE_CONNECTION') private readonly db: PostgresJsDatabase,
+    @Inject('PROJECT_CONNECTION') private readonly db: PostgresJsDatabase,
   ) {}
 
   async getPartitions() {

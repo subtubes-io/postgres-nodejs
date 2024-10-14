@@ -62,7 +62,7 @@ export const ForeignKeyTable: React.FC<ForeignKeyTableProps> = () => {
         </thead>
         <tbody>
           {foreignKeys.map((row, index) => (
-            <tr key={`row-${index}`}>
+            <tr key={`row-${index}`} className="dark:hover:bg-gray-700">
               <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
                 {row.referencedtable}
               </td>

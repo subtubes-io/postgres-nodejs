@@ -3,7 +3,12 @@ import React, { useEffect, useState } from "react";
 import { TriggerRepository } from "@/repositories/TriggerRepository";
 import type { Trigger } from "@/repositories/TriggerRepository";
 import { SettingsPanel } from "./SettingsPanel";
-import { Dialog, Transition } from "@headlessui/react";
+import {
+  Dialog,
+  Transition,
+  DialogPanel,
+  TransitionChild,
+} from "@headlessui/react";
 import { Fragment } from "react";
 
 interface TriggersTableProps {}
@@ -16,17 +21,14 @@ const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
 
   return (
     <>
-      <pre className="whitespace-pre-wrap break-words text-sm/5">
-        {text.slice(0, 100)}...
-      </pre>
       <button onClick={openModal} className="text-blue-600 hover:underline">
-        Show more
+        Open Query
       </button>
 
       {/* Modal Dialog */}
       <Transition show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -36,11 +38,11 @@ const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
             leaveTo="opacity-0"
           >
             <div className="fixed inset-0 bg-black bg-opacity-50" />
-          </Transition.Child>
+          </TransitionChild>
 
           <div className="fixed inset-0 z-10 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
+              <TransitionChild
                 as={Fragment}
                 enter="ease-out duration-300"
                 enterFrom="opacity-0 scale-95"
@@ -49,7 +51,7 @@ const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-lg bg-zinc-900 p-6 text-left align-middle shadow-xl transition-all">
+                <DialogPanel className="w-full max-w-3xl transform overflow-hidden rounded-lg bg-zinc-900 p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-white"
@@ -70,8 +72,8 @@ const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
                       Close
                     </button>
                   </div>
-                </Dialog.Panel>
-              </Transition.Child>
+                </DialogPanel>
+              </TransitionChild>
             </div>
           </div>
         </Dialog>
@@ -136,7 +138,7 @@ export const TriggersTable: React.FC<TriggersTableProps> = () => {
         </thead>
         <tbody>
           {triggers.map((row, index) => (
-            <tr key={`row-${index}`}>
+            <tr key={`row-${index}`} className="dark:hover:bg-gray-700">
               <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
                 {row.triggername}
               </td>
