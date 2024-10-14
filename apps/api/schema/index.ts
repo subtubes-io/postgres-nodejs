@@ -9,3 +9,14 @@ export const projects = pgTable('projects', {
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
+
+// Define the modules table associated with projects
+export const modules = pgTable('modules', {
+  id: uuid('id').primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  settings: jsonb('settings').notNull(), // JSONB field for module settings
+  projectId: uuid('project_id').references(() => projects.id), // Correct foreign key reference to projects table
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+  deletedAt: timestamp('deleted_at'), // Soft delete column, nullable
+});
