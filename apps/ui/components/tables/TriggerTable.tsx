@@ -1,18 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { TriggerRepository } from "@/repositories/TriggerRepository";
+import type { Trigger } from "@/repositories/TriggerRepository";
 
-interface TriggerRow {
-  triggerName: string;
-  functionName: string;
-  functionDefinition: string;
-  triggerType: string;
-  event: (string | null)[];
-  level: string;
-}
-
-interface TriggersTableProps {
-  data: TriggerRow[];
-}
+interface TriggersTableProps {}
 
 const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
   const [isTruncated, setIsTruncated] = useState(true);
@@ -39,7 +30,28 @@ const TruncatedText: React.FC<{ text: string }> = ({ text }) => {
   );
 };
 
-export const TriggersTable: React.FC<TriggersTableProps> = ({ data }) => {
+export const TriggersTable: React.FC<TriggersTableProps> = () => {
+  const [triggers, setTriggers] = useState<Trigger[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const triggerRepository = new TriggerRepository();
+
+  useEffect(() => {
+    const fetchTriggers = async () => {
+      try {
+        const data = await triggerRepository.getTriggers();
+        setTriggers(data);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch triggers.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTriggers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <table className="min-w-full text-left text-sm/6 text-zinc-950 dark:text-white">
       <thead className="text-zinc-500 dark:text-zinc-400">
@@ -65,16 +77,16 @@ export const TriggersTable: React.FC<TriggersTableProps> = ({ data }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((row, index) => (
+        {triggers.map((row, index) => (
           <tr key={`row-${index}`}>
             <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-              {row.triggerName}
+              {row.triggername}
             </td>
             <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-              {row.functionName}
+              {row.functionname}
             </td>
             <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-              {row.triggerType}
+              {row.triggertype}
             </td>
             <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
               {row.event.filter((e) => e !== null).join(", ")}
@@ -88,7 +100,7 @@ export const TriggersTable: React.FC<TriggersTableProps> = ({ data }) => {
               </pre>
             </td> */}
             <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-              <TruncatedText text={row.functionDefinition} />
+              <TruncatedText text={row.functiondefinition} />
             </td>
           </tr>
         ))}

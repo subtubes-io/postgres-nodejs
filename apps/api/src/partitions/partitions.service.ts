@@ -71,4 +71,87 @@ export class PartitionsService {
       throw new Error(`Error executing raw SQL: ${error.message}`);
     }
   }
+
+  async getForeignKeyRefs() {
+    const sqlQuery = `
+        SELECT
+            confrel.relname AS referencedtable,
+            conname AS constraintname,
+            conrel.relname AS referencingtable,
+            A.attname AS referencingcolumn 
+        FROM
+            pg_constraint con
+            JOIN pg_class confrel ON confrel.OID = con.confrelid -- Referenced table (foo)
+            JOIN pg_class conrel ON conrel.OID = con.conrelid -- Referencing table
+            JOIN pg_attribute A ON A.attnum = ANY ( con.conkey ) 
+            AND A.attrelid = con.conrelid 
+        WHERE
+            con.contype = 'f' -- Foreign key
+            
+            AND confrel.relname LIKE'users%';
+    `;
+
+    try {
+      const result = await this.db.execute(sqlQuery);
+      return result; // Handle result accordingly
+    } catch (error) {
+      throw new Error(`Error executing raw SQL: ${error.message}`);
+    }
+  }
+
+  async getTriggerRefs() {
+    const sqlQuery = `
+            SELECT
+                tg.tgname AS triggername,
+                pg_proc.proname AS functionname,
+                pg_get_functiondef ( pg_proc.OID ) AS functiondefinition,
+            CASE
+                    
+                    WHEN tg.tgtype & 1 = 1 THEN
+                    'AFTER' 
+                    WHEN tg.tgtype & 1 = 0 THEN
+                    'BEFORE' ELSE'INSTEAD OF' 
+                END AS triggertype,
+                ARRAY [
+            CASE
+                    
+                    WHEN tg.tgtype & 2 = 2 THEN
+                    'INSERT' ELSE NULL 
+                END,
+            CASE
+                
+                WHEN tg.tgtype & 4 = 4 THEN
+                'DELETE' ELSE NULL 
+                END,
+            CASE
+                
+                WHEN tg.tgtype & 8 = 8 THEN
+                'UPDATE' ELSE NULL 
+                END,
+            CASE
+                
+                WHEN tg.tgtype & 16 = 16 THEN
+                'TRUNCATE' ELSE NULL 
+                END ] AS event,
+            CASE
+                    
+                    WHEN tg.tgtype & 64 = 64 THEN
+                    'ROW' ELSE'STATEMENT' 
+            END AS LEVEL 
+            FROM
+                pg_trigger tg
+                JOIN pg_class tbl ON tg.tgrelid = tbl.
+                OID JOIN pg_proc ON tg.tgfoid = pg_proc.OID 
+            WHERE
+                NOT tg.tgisinternal -- Exclude internal triggers
+                AND pg_get_functiondef ( pg_proc.OID ) LIKE'%events%' -- Replace with your table name;
+    `;
+
+    try {
+      const result = await this.db.execute(sqlQuery);
+      return result; // Handle result accordingly
+    } catch (error) {
+      throw new Error(`Error executing raw SQL: ${error.message}`);
+    }
+  }
 }

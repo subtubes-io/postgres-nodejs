@@ -1,17 +1,34 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 
-interface TableRow {
-  referenceTable: string;
-  constraintName: string;
-  referencingTable: string;
-  referencingColumn: string;
-}
+import type { ForeignKey } from "@/repositories/ForeignKeyRefRepository";
+import { ForeignKeyRefRepository } from "@/repositories/ForeignKeyRefRepository";
 
-interface ForeignKeyTableProps {
-  data: TableRow[];
-}
+interface ForeignKeyTableProps {}
 
-export const ForeignKeyTable: React.FC<ForeignKeyTableProps> = ({ data }) => {
+export const ForeignKeyTable: React.FC<ForeignKeyTableProps> = () => {
+  const [foreignKeys, setForeignKeys] = useState<ForeignKey[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const foreignKeyRepository = new ForeignKeyRefRepository();
+
+  useEffect(() => {
+    const fetchForeignKeys = async () => {
+      try {
+        const data = await foreignKeyRepository.getForeignKeys();
+        setForeignKeys(data);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch foreign keys.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchForeignKeys();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <table className="min-w-full text-left text-sm/6 text-zinc-950 dark:text-white">
       <thead className="text-zinc-500 dark:text-zinc-400">
@@ -28,30 +45,30 @@ export const ForeignKeyTable: React.FC<ForeignKeyTableProps> = ({ data }) => {
           <th className="border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
             Referencing Column
           </th>
-          <th className="relative w-0 border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
+          {/* <th className="relative w-0 border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
             <span className="sr-only">Status</span>
           </th>
           <th className="relative w-0 border-b border-b-zinc-950/10 px-4 py-2 font-medium first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] dark:border-b-white/10 sm:first:pl-1 sm:last:pr-1">
             <span className="sr-only">Actions</span>
-          </th>
+          </th> */}
         </tr>
       </thead>
       <tbody>
-        {data.map((row, index) => (
+        {foreignKeys.map((row, index) => (
           <tr key={`row-${index}`}>
             <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-              {row.referenceTable}
+              {row.referencedtable}
             </td>
             <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-              {row.constraintName}
+              {row.constraintname}
             </td>
             <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-              {row.referencingTable}
+              {row.referencingtable}
             </td>
             <td className="relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
-              {row.referencingColumn}
+              {row.referencingcolumn}
             </td>
-            <td className="text-zinc-500 relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
+            {/* <td className="text-zinc-500 relative px-4 first:pl-[var(--gutter,theme(spacing.2))] last:pr-[var(--gutter,theme(spacing.2))] border-b border-zinc-950/5 dark:border-white/5 py-4 sm:first:pl-1 sm:last:pr-1">
               <span className="inline-flex items-center gap-x-1.5 rounded-md px-1.5 py-0.5 text-sm/5 font-medium sm:text-xs/5 bg-lime-400/20 text-lime-700 dark:bg-lime-400/10 dark:text-lime-300">
                 Success
               </span>
@@ -72,7 +89,7 @@ export const ForeignKeyTable: React.FC<ForeignKeyTableProps> = ({ data }) => {
                   <path d="M8 2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM8 6.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM9.5 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z"></path>
                 </svg>
               </button>
-            </td>
+            </td> */}
           </tr>
         ))}
         {/* Add more rows as needed */}

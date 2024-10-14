@@ -27,4 +27,26 @@ export class PartitionsController {
       throw new Error(`Error fetching partition data: ${error.message}`);
     }
   }
+
+  @Get('/foreign-key-refs')
+  async getForeignKeyRef() {
+    try {
+      // Call the service to run the raw SQL query
+      const data = await this.partitionsService.getForeignKeyRefs();
+      return data; // Return the result as the response
+    } catch (error) {
+      throw new Error(`Error fetching partition data: ${error.message}`);
+    }
+  }
+
+  @Get('/trigger-refs')
+  async getTriggerRef() {
+    try {
+      // Call the service to run the raw SQL query
+      const data = await this.partitionsService.getTriggerRefs();
+      return data; // Return the result as the response
+    } catch (error) {
+      throw new Error(`Error fetching partition data: ${error.message}`);
+    }
+  }
 }
